@@ -1,4 +1,6 @@
-### how to run
+Laravel horror game sketch.
+
+### How to run
 1. clone it
 2. composer install
 3. npm install

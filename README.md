@@ -1,4 +1,4 @@
-Laravel horror game sketch.
+Laravel 11 horror game sketch.
 
 ### How to run
 1. clone it

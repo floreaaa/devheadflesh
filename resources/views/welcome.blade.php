@@ -41,9 +41,7 @@
         <div> 
             <div class="cross cursor-follow"></div>
         <div>
-
-        <img src="{{ Vite::asset('.resources/images/d.jpg') }}" alt="">
-        
+            
         <script>
             document.addEventListener('mousemove', function(e) {
             const cursorFollow = document.querySelector('.cursor-follow');

@@ -1,4 +1,4 @@
-Laravel 11 horror game sketch.
+Laravel 11, tailwindcss, Vite.
 
 ### How to run
 1. clone it

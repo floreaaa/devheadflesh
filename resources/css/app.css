@@ -2,7 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body {
+/* styles.css */
+.bg-custom {
+    @apply bg-center bg-cover;
     background-image: url('/public/images/d.jpg');
+}
+
+.left-column,
+.right-column {
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.left-column {
+    left: 0;
+    margin-left: 10px; 
+}
+
+.right-column {
+    right: 0;
+    margin-right: 10px;
+}
+
+.cross {
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 50px;
+    height: 150px;
+    background-color: hsl(195, 57%, 13%);
+}    
+.cross::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    width: 150px;
+    height: 50px;
+    background-color: hsl(195, 65%, 15%);
+    transform: translate(-50%, -50%);
+}
+.cursor-follow {
+    position: absolute;
+    pointer-events: none; 
 }

@@ -4,32 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class PrayerController extends Controller
 {
     public function index() {
  
-        // Specify the directory you want to list files from
-        $directory = '/uploads';
+        // Get all files in the specified directory
+        $directory = public_path('uploads');
+        $files = File::files($directory);
 
-        $files = Storage::allFiles($directory);
+        // Initialize an array to hold the URLs
+        $filesUrls = [];
 
-        $index = 0;
-        $jsonFormatFiles = [];
-        foreach ($files as $index => $value) {
-            $jsonFormatFiles[] = [
-                'id' => $index + 1, 
-                'value' => 'public/' . $value
-            ];
+        // Iterate through the files and generate their URLs
+        foreach ($files as $file) {
+            // Get the relative path of the file
+            $relativePath = $file->getRelativePathname();
+
+            // Generate the full URL
+            $url = Storage::url($relativePath);
+
+            // Add the URL to the array
+            $filesUrls[] = $url;
         }
 
-        return response()->json($jsonFormatFiles);
+        // Return the array of URLs
+        $filesUrls = array_map(function($url) {
+            return str_replace('storage', 'uploads', $url);
+        }, $filesUrls);
+
+        return $filesUrls;
 
     }
 
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'file' => 'required|mimes:mp3|max:15000',
         ]);
@@ -37,13 +47,13 @@ class PrayerController extends Controller
         // Retrieve the uploaded file
         $file = $request->file('file');
 
-        // Generate a unique file name
         $fileName = $file->getClientOriginalName();
 
-        // Store the file in the 'public/uploads' directory
-        $path = $file->storeAs('/uploads', $fileName);
+        $destinationPath = public_path('uploads');
+        $file->move($destinationPath, $fileName);
+        $fileUrl = asset('uploads/' . $fileName);
 
-        // Return a response with the file path
-        return response()->json(['path' => Storage::url($path)], 201);
+        // Return a response with the file URL
+        return response()->json(['url' => $fileUrl], 200);
     }
 }

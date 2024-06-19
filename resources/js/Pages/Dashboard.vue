@@ -37,14 +37,11 @@ onMounted(() => {
                 <div v-if="loading">Loading...</div>
                     <div v-else-if="error">{{ error }}</div>
                 <ul v-else>
-                  
-                    <li v-for="prayer in prayers" :key="prayer.id">
-                        <div class="w-1/6"> 
-                            <audio controls :src="prayer.value" ></audio>
+                    <li v-for="prayer in prayers">
+                        <div class="w-1/6 p-2"> 
+                            <audio controls :src="prayer" ></audio>
                         </div>
                     </li>
-                  
-
                 </ul>
 
             </div>

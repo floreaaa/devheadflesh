@@ -30,11 +30,9 @@ class PrayerController extends Controller
         }
 
         // Return the array of URLs
-        $filesUrls = array_map(function($url) {
+        return array_map(function($url) {
             return str_replace('storage', 'uploads', $url);
         }, $filesUrls);
-
-        return $filesUrls;
 
     }
 

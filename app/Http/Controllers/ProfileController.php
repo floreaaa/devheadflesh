@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -60,4 +62,21 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function indexonline()
+    {
+        $listedUsers = [];
+        $users = User::all();
+        $activeThreshold = Carbon::now()->subSeconds(10);
+
+        foreach($users as $user)
+            if ($user->last_activity >= $activeThreshold)
+                array_push($listedUsers, ['online' => 1, 'user' => $user]);  
+            else 
+                array_push($listedUsers, ['online' => 0, 'user' => $user]);
+
+        return $listedUsers;
+    }
+
+
 }

@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/prayers', [PrayerController::class, 'index']);
 
 Route::post('/new', [PrayerController::class, 'store']);
+Route::get('/user/store', [PrayerController::class, 'userstore']);
 
 Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);

@@ -10,30 +10,17 @@ class PrayerController extends Controller
 {
     public function index() {
  
-        // Get all files in the specified directory
-        $directory = public_path('uploads');
-        $files = File::files($directory);
+          // Get all files from a specific directory
+          $files = Storage::disk('public')->files('/uploads/');
 
-        // Initialize an array to hold the URLs
-        $filesUrls = [];
-
-        // Iterate through the files and generate their URLs
-        foreach ($files as $file) {
-            // Get the relative path of the file
-            $relativePath = $file->getRelativePathname();
-
-            // Generate the full URL
-            $url = Storage::url($relativePath);
-
-            // Add the URL to the array
-            $filesUrls[] = $url;
-        }
-
-        // Return the array of URLs
-        return array_map(function($url) {
-            return str_replace('storage', 'uploads', $url);
-        }, $filesUrls);
-
+          // Generate URLs for each file
+          $fileUrls = [];
+          foreach ($files as $file) {
+              $fileUrls[] = Storage::url($file);
+          }
+  
+          // Return URLs as a response
+          return response()->json($fileUrls);
     }
 
     public function store(Request $request)
@@ -41,17 +28,26 @@ class PrayerController extends Controller
         $request->validate([
             'file' => 'required|mimes:mp3|max:15000',
         ]);
-
-        // Retrieve the uploaded file
+    
+        //Object of type Illuminate Http\Illuminate\UploadedFile
         $file = $request->file('file');
 
-        $fileName = $file->getClientOriginalName();
+        // Generate the file URL
+        $path = $file->storeAs('/public/uploads', $file->getClientOriginalName());
 
-        $destinationPath = public_path('uploads');
-        $file->move($destinationPath, $fileName);
-        $fileUrl = asset('uploads/' . $fileName);
+        return response()->json(['url' => $path], 200);
+    }
 
-        // Return a response with the file URL
-        return response()->json(['url' => $fileUrl], 200);
+    public function userstore(Request $request) 
+    {
+        $directoryPath = 'public/uploads/u';
+    
+        // Check if the directory already exists
+        if (!Storage::exists($directoryPath)) {
+            Storage::makeDirectory($directoryPath);
+            return 'Directory created successfully!';
+        } else {
+            return 'Directory already exists.';
+        }
     }
 }
